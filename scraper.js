@@ -19,8 +19,18 @@ const scraper = {
         let $ = cheerio.load(html);
         //scrape description from 2nd page
         const description = $('.p-style2').text();
+        const keys = ['cta', 'breed', 'sex', 'age', 'weight', 'location'];
+        const attributes = {};
+        $('a').each((i, link) => {
+          if (i === 0 || i === 5) console.log('unneeded');
+          else attributes[keys[i]] = link.children[0].data;
+        });
+        const breed = attributes.breed;
+        const sex = attributes.sex.slice(6);
+        const age = attributes.age.slice(6);
+        const weight = attributes.weight.slice(9);
         //invoke resolve callback with data for current animal
-        resolve({ name, description, pic, profileLink });
+        resolve({ name, description, breed, sex, age, weight, pic, profileLink });
         reject(err);
       });
     });
