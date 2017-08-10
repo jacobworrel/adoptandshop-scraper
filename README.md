@@ -1,0 +1,1 @@
+# adoptandshop-scraper
