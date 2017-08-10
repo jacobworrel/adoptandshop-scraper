@@ -1,0 +1,19 @@
+{
+  "name": "adoptandshop-scraper",
+  "version": "1.0.0",
+  "description": "A web scraper to get information about the adoptable pets at LA based non-profit Adopt and Shop.",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "Jacob Worrel",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^0.19.0",
+    "express": "^4.12.4",
+    "request": "^2.55.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
