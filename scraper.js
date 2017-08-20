@@ -40,7 +40,10 @@ const scraper = {
     const url = req.route.path === '/culvercity' ? culverUrl : lakewoodUrl;
     //request html from 1st page
     request(url, (error, response, html) => {
-      if (scraper.cache[req.route.path]) res.send(scraper.cache[req.route.path]);
+      if (scraper.cache[req.route.path]) {
+        res.set({ 'Access-Control-Allow-Origin': '*' });
+        res.send(scraper.cache[req.route.path]);
+      }
       //make html on 1st page targetable
       let $ = cheerio.load(html);
       const animalPromises = [];
@@ -48,7 +51,7 @@ const scraper = {
       $('.profile_link').each((i, link) => {
         animalPromises.push(scraper.getAnimalData($, link));
       });
-      //when all promises have resolved, cache data and send response
+      //when all promises in animalPromises have resolved, cache data and send response
       Promise.all(animalPromises)
         .then((animals) => {
           //if data hasn't been stored in cache, store data under route path
