@@ -4,6 +4,7 @@ const app = angular
   .module('myApp', [
     'ngRoute',
     'AdoptandShop.HomeController',
+    'AdoptandShop.Animal'
   ]);
 
 

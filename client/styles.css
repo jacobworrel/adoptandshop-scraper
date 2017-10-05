@@ -1,0 +1,36 @@
+.center {
+  text-align: center;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+}
+
+.search, .dropdown {
+  margin: 40px 10px;
+}
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.animal {
+  /*border: 1px solid black;*/
+  margin: 20px 0;
+  display: flex;
+}
+
+.pic, .info {
+  margin: 20px;
+}
+
+.pic {
+  border-radius: 50%;
+}
+
+.info-container {
+  display: flex;
+  align-items: center;
+}

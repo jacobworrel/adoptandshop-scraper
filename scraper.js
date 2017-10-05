@@ -38,12 +38,13 @@ const scraper = {
     const lakewoodUrl = 'https://www.shelterluv.com/available_pets/338?embedded=1&iframeId=shelterluv_wrap_1451949982395&columns=1#https%3A%2F%2Fwww.adoptandshop.org%2Flakewood-pets%2F%23sl_embed%26page%3Dshelterluv_wrap_1451949982395%252Favailable_pets%252F338';
     //check req.route.path to know which page to scrape
     const url = req.route.path === '/culvercity' ? culverUrl : lakewoodUrl;
+    if (scraper.cache[req.route.path]) {
+      console.log('using cached data');
+      res.set({ 'Access-Control-Allow-Origin': '*' });
+      res.send(scraper.cache[req.route.path]);
+    }
     //request html from 1st page
     request(url, (error, response, html) => {
-      if (scraper.cache[req.route.path]) {
-        res.set({ 'Access-Control-Allow-Origin': '*' });
-        res.send(scraper.cache[req.route.path]);
-      }
       //make html on 1st page targetable
       let $ = cheerio.load(html);
       const animalPromises = [];
@@ -58,7 +59,7 @@ const scraper = {
           if (!scraper.cache[req.route.path]) {
             scraper.cache[req.route.path] = animals;
             //set a timeout to clear the cache after 5 mins
-            setTimeout(() => scraper.cache = Object.create(null), 300000);
+            setTimeout(() => scraper.cache = Object.create(null), 10000000);
           }
           //set response header to allow CORS and send data to client
           res.set({ 'Access-Control-Allow-Origin': '*' });
