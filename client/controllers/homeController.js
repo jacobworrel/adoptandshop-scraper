@@ -12,11 +12,10 @@ function HomeController($scope, $http, $apply) {
   $scope.animals = [];
   $scope.search;
   $scope.sortBy;
-  const promises = urls.map(url => $http.get(url));
+  const promises = urls.map(url => $http.get(url).catch(() => console.log(err)));
   Promise.all(promises)
     .then(res => {
       $scope.animals = res.reduce((a, c) => [...a, ...c.data], []);
-      //need to look up what this does
       $scope.$apply();
     })
     .catch(err => console.log(err));
