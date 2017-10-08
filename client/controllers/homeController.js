@@ -17,6 +17,8 @@ function HomeController($scope, $http, $apply) {
     .then(res => {
       $scope.animals = res.reduce((a, c) => [...a, ...c.data], []);
       $scope.$apply();
+      const el = document.getElementsByTagName('html')[0];
+      el.className = el.className.replace(/loading/, ' ');
     })
     .catch(err => console.log(err));
 }
