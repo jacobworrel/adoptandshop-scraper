@@ -7,7 +7,7 @@ const scraper = {
   //instantiate cache as empty object
   cache: Object.create(null),
 
-  getAnimalData: ($, link) => {
+  getAnimalData: ($, link, location) => {
     return new Promise((resolve, reject) => {
       //scrape profile link, pic and name from 1st page
       const profileLink = $(link).attr('href');
@@ -27,7 +27,7 @@ const scraper = {
         const sex = attributes[2].slice(6);
         const age = attributes[3].slice(6);
         //invoke resolve callback with data for current animal
-        resolve({ name, description, breed, sex, age, pic, profileLink });
+        resolve({ name, description, breed, sex, age, pic, profileLink, location });
         reject(err);
       });
     });
@@ -37,7 +37,16 @@ const scraper = {
     const culverUrl = 'https://www.shelterluv.com/available_pets/332?embedded=1&iframeId=shelterluv_wrap_1451949179363&columns=1#https%3A%2F%2Fwww.adoptandshop.org%2Fculver-city-pets%2F%23sl_embed%26page%3Dshelterluv_wrap_1451949179363%252Favailable_pets%252F332';
     const lakewoodUrl = 'https://www.shelterluv.com/available_pets/338?embedded=1&iframeId=shelterluv_wrap_1451949982395&columns=1#https%3A%2F%2Fwww.adoptandshop.org%2Flakewood-pets%2F%23sl_embed%26page%3Dshelterluv_wrap_1451949982395%252Favailable_pets%252F338';
     //check req.route.path to know which page to scrape
-    const url = req.route.path === '/culvercity' ? culverUrl : lakewoodUrl;
+    let url;
+    let location;
+    // const url = req.route.path === '/culvercity' ? culverUrl : lakewoodUrl;
+    if (req.route.path === '/culvercity') {
+      url = culverUrl;
+      location = 'Adopt & Shop Culver City';
+    } else {
+      url = lakewoodUrl;
+      location = 'Adopt & Shop Lakewood';
+    }
     if (scraper.cache[req.route.path]) {
       console.log('using cached data');
       res.set({ 'Access-Control-Allow-Origin': '*' });
@@ -50,7 +59,7 @@ const scraper = {
       const animalPromises = [];
       //loop through every '.profile-link' <a> tag on first page
       $('.profile_link').each((i, link) => {
-        animalPromises.push(scraper.getAnimalData($, link));
+        animalPromises.push(scraper.getAnimalData($, link, location));
       });
       //when all promises in animalPromises have resolved, cache data and send response
       Promise.all(animalPromises)

@@ -19,6 +19,7 @@ function animal() {
             <span class="sex">{{animal.sex}} | </span>
             <span class="age">{{animal.age}}</span>
             <p class="description">{{animal.description}}</p>
+            <p class="location">Location: {{animal.location}}</p>
           </div>
         </div>
         </div>
