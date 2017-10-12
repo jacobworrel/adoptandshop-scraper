@@ -12,9 +12,14 @@ body {
 /* HEADER STYLES */
 
 header {
+  font-weight: ;
   padding: 10px 0;
-  background-color: #13748C;
+  background-color: #A1A5B2;
   color: #FFF;
+}
+
+header > h1 {
+  text-transform: uppercase;
 }
 
 /* FORM STYLES */
@@ -55,10 +60,6 @@ select {
   display: flex;
 }
 
-.name {
-  color: #00B494;
-}
-
 .pic, .info {
   margin: 20px;
 }
@@ -70,4 +71,16 @@ select {
 .info-container {
   display: flex;
   align-items: center;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+}
+
+.loading-gif {
+  margin-top: 100px;
+  height: 40%;
+  width: 40%;
+  border-radius: 20%;
 }
