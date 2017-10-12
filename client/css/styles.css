@@ -18,10 +18,6 @@ header {
   color: #FFF;
 }
 
-header > h1 {
-  text-transform: uppercase;
-}
-
 /* FORM STYLES */
 
 form {
