@@ -7,7 +7,7 @@ const scraper = {
   //instantiate cache as empty object
   cache: Object.create(null),
 
-  getAnimalData: ($, link, location) => {
+  getAnimalData($, link, location) {
     return new Promise((resolve, reject) => {
       //scrape profile link, pic and name from 1st page
       const profileLink = $(link).attr('href');
@@ -19,10 +19,7 @@ const scraper = {
         let $ = cheerio.load(html);
         //scrape description from 2nd page
         const description = $('.p-style2').text();
-        const attributes = [];
-        $('a').each((i, link) => {
-          attributes.push(link.children[0].data);
-        });
+        const attributes = [].map.call($('a'), link => link.children[0].data);
         const breed = attributes[1];
         const sex = attributes[2].slice(6);
         const age = attributes[3].slice(6);
@@ -33,7 +30,7 @@ const scraper = {
     });
   },
 
-  getData: (req, res, next) => {
+  getData(req, res, next) {
     const culverUrl = 'https://www.shelterluv.com/available_pets/332?embedded=1&iframeId=shelterluv_wrap_1451949179363&columns=1#https%3A%2F%2Fwww.adoptandshop.org%2Fculver-city-pets%2F%23sl_embed%26page%3Dshelterluv_wrap_1451949179363%252Favailable_pets%252F332';
     const lakewoodUrl = 'https://www.shelterluv.com/available_pets/338?embedded=1&iframeId=shelterluv_wrap_1451949982395&columns=1#https%3A%2F%2Fwww.adoptandshop.org%2Flakewood-pets%2F%23sl_embed%26page%3Dshelterluv_wrap_1451949982395%252Favailable_pets%252F338';
     //check req.route.path to know which page to scrape
@@ -56,12 +53,10 @@ const scraper = {
     request(url, (error, response, html) => {
       //make html on 1st page targetable
       let $ = cheerio.load(html);
-      const animalPromises = [];
-      //loop through every '.profile-link' <a> tag on first page
-      $('.profile_link').each((i, link) => {
-        animalPromises.push(scraper.getAnimalData($, link, location));
-      });
-      //when all promises in animalPromises have resolved, cache data and send response
+      // map over every '.profile-link' <a> tag on first page
+      const followLink = link => scraper.getAnimalData($, link, location);
+      const animalPromises = [].map.call($('.profile_link'), followLink);
+      // when all promises in animalPromises have resolved, cache data and send response
       Promise.all(animalPromises)
         .then((animals) => {
           //if data hasn't been stored in cache, store data under route path
